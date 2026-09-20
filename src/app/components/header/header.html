@@ -1,0 +1,95 @@
+<a
+  href="#about"
+  class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-60 focus:rounded-sm focus:bg-forest focus:px-4 focus:py-2 focus:text-ivory"
+>
+  Անցնել հիմնական բովանդակությանը
+</a>
+
+<header
+  class="fixed inset-x-0 top-0 z-50 transition-all duration-500"
+  [class]="barClass()"
+>
+  <div class="u-container flex h-16 items-center justify-between md:h-20">
+    <a
+      href="#hero"
+      class="font-display text-base font-semibold tracking-[0.18em] transition-colors duration-500 md:text-lg"
+      [class]="brandClass()"
+    >
+      {{ property.name }}
+    </a>
+
+    <nav class="hidden items-center gap-8 lg:flex" aria-label="Հիմնական">
+      @for (link of links; track link.fragment) {
+        <a
+          [href]="'#' + link.fragment"
+          class="relative text-sm transition-colors duration-300 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-gold-soft after:transition-all after:duration-300 hover:after:w-full"
+          [class]="linkClass()"
+        >
+          {{ link.label }}
+        </a>
+      }
+
+      @if (hasContact) {
+        <a
+          href="#contact"
+          class="rounded-sm px-5 py-2.5 text-sm font-medium transition-all duration-300"
+          [class]="ctaClass()"
+        >
+          Կապ հաստատել
+        </a>
+      }
+    </nav>
+
+    <button
+      type="button"
+      class="-mr-2 flex h-10 w-10 items-center justify-center lg:hidden"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="mobile-menu"
+      [attr.aria-label]="menuOpen() ? 'Փակել մենյուն' : 'Բացել մենյուն'"
+      (click)="toggleMenu()"
+    >
+      <span class="relative block h-4 w-6" aria-hidden="true">
+        <span
+          class="absolute left-0 block h-px w-6 transition-all duration-300"
+          [class]="lineColor() + (menuOpen() ? ' top-1.5 rotate-45' : ' top-0')"
+        ></span>
+        <span
+          class="absolute top-1.5 left-0 block h-px w-6 transition-opacity duration-300"
+          [class]="lineColor() + (menuOpen() ? ' opacity-0' : ' opacity-100')"
+        ></span>
+        <span
+          class="absolute left-0 block h-px w-6 transition-all duration-300"
+          [class]="lineColor() + (menuOpen() ? ' top-1.5 -rotate-45' : ' top-3')"
+        ></span>
+      </span>
+    </button>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="overflow-hidden border-t border-charcoal/10 bg-ivory transition-all duration-500 lg:hidden"
+    [class]="menuPanelClass()"
+    [attr.inert]="menuOpen() ? null : ''"
+  >
+    <nav class="u-container flex flex-col py-2" aria-label="Շարժական մենյու">
+      @for (link of links; track link.fragment) {
+        <a
+          [href]="'#' + link.fragment"
+          class="border-b border-charcoal/10 py-3.5 text-[0.95rem] text-charcoal-soft last:border-0"
+          (click)="closeMenu()"
+        >
+          {{ link.label }}
+        </a>
+      }
+      @if (hasContact) {
+        <a
+          href="#contact"
+          class="my-4 rounded-sm bg-forest px-5 py-3.5 text-center text-[0.95rem] font-medium text-ivory"
+          (click)="closeMenu()"
+        >
+          Կապ հաստատել
+        </a>
+      }
+    </nav>
+  </div>
+</header>

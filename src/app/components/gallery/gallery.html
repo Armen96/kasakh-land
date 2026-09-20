@@ -1,0 +1,190 @@
+<section id="gallery" class="scroll-mt-20 bg-ivory-deep py-20 md:py-28">
+  <div class="u-container">
+    <div class="max-w-2xl" appReveal>
+      <p class="u-eyebrow">Լուսանկարներ</p>
+      <div class="u-rule mt-4"></div>
+      <h2 class="mt-6 font-display text-3xl font-medium text-charcoal md:text-4xl">
+        Հողամասի լուսանկարները
+      </h2>
+      <p class="mt-4 text-[0.95rem] text-charcoal-soft">
+        Ներկայացված են հողամասի իրական լուսանկարները։
+      </p>
+    </div>
+
+    <figure class="mt-12" appReveal>
+      <button
+        type="button"
+        class="group block w-full cursor-zoom-in overflow-hidden rounded-sm bg-charcoal/5"
+        (click)="open(0)"
+      >
+        <img
+          [src]="featured.src"
+          [attr.srcset]="featured.srcset ?? null"
+          sizes="(min-width: 1280px) 1216px, 100vw"
+          [alt]="featured.alt"
+          [width]="featured.width"
+          [height]="featured.height"
+          loading="lazy"
+          decoding="async"
+          class="aspect-4/3 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02] md:aspect-16/9"
+        />
+      </button>
+      <figcaption class="mt-3 text-[0.8125rem] text-charcoal-mute">
+        {{ featured.alt }}
+      </figcaption>
+    </figure>
+
+    @if (rest.length > 0 || placeholders.length > 0) {
+      <div class="mt-5 grid grid-cols-2 gap-4 md:mt-6 md:grid-cols-3 md:gap-6">
+        @for (image of rest; track image.src; let i = $index) {
+          <figure [appReveal]="i * 70">
+            <button
+              type="button"
+              class="group relative block w-full cursor-zoom-in overflow-hidden rounded-sm bg-charcoal/5"
+              (click)="open(i + 1)"
+            >
+              <img
+                [src]="image.src"
+                [attr.srcset]="image.srcset ?? null"
+                sizes="(min-width: 768px) 33vw, 50vw"
+                [alt]="image.alt"
+                [width]="image.width"
+                [height]="image.height"
+                loading="lazy"
+                decoding="async"
+                class="aspect-4/3 w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+              />
+              @if (image.badge) {
+                <span
+                  class="absolute top-2.5 left-2.5 rounded-xs bg-charcoal/75 px-2.5 py-1 text-[0.6875rem] font-medium text-ivory backdrop-blur-sm"
+                >
+                  {{ image.badge }}
+                </span>
+              }
+            </button>
+            <figcaption class="mt-2 text-[0.75rem] leading-snug text-charcoal-mute">
+              {{ image.alt }}
+            </figcaption>
+          </figure>
+        }
+
+        @for (slot of placeholders; track slot) {
+          <div
+            class="flex aspect-4/3 flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-charcoal/20 bg-ivory px-4 text-center"
+          >
+            <svg
+              class="h-5 w-5 text-charcoal/25"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+            >
+              <rect x="3" y="5" width="18" height="14" rx="2" />
+              <circle cx="8.5" cy="10" r="1.5" />
+              <path d="m21 16-5-5-4.5 4.5" />
+            </svg>
+            <p class="text-[0.75rem] leading-snug text-charcoal-mute">
+              Լուսանկարը շուտով կավելացվի
+            </p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+@if (isOpen() && current(); as image) {
+  <div
+    #dialog
+    class="fixed inset-0 z-100 flex flex-col bg-charcoal/96 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Լուսանկարի դիտում"
+    tabindex="-1"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)"
+  >
+    <div class="flex items-center justify-between px-4 py-4 md:px-8">
+      <p class="text-[0.8125rem] text-ivory/60">
+        {{ (openIndex() ?? 0) + 1 }} / {{ images.length }}
+      </p>
+      <button
+        type="button"
+        class="flex h-10 w-10 items-center justify-center rounded-full text-ivory/80 transition-colors hover:bg-ivory/10 hover:text-ivory"
+        aria-label="Փակել"
+        (click)="close()"
+      >
+        <svg
+          class="h-5 w-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="m6 6 12 12M18 6 6 18" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="relative flex min-h-0 flex-1 items-center justify-center px-4 md:px-20">
+      <img
+        [src]="image.src"
+        [alt]="image.alt"
+        class="max-h-full max-w-full object-contain"
+      />
+
+      @if (images.length > 1) {
+        <button
+          type="button"
+          class="absolute left-2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/50 text-ivory/85 transition-colors hover:bg-charcoal/75 hover:text-ivory md:left-6"
+          aria-label="Նախորդը"
+          (click)="previous()"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m14.5 5-7 7 7 7" />
+          </svg>
+        </button>
+        <button
+          type="button"
+          class="absolute right-2 flex h-11 w-11 items-center justify-center rounded-full bg-charcoal/50 text-ivory/85 transition-colors hover:bg-charcoal/75 hover:text-ivory md:right-6"
+          aria-label="Հաջորդը"
+          (click)="next()"
+        >
+          <svg
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m9.5 5 7 7-7 7" />
+          </svg>
+        </button>
+      }
+    </div>
+
+    <p class="px-6 py-5 text-center text-[0.8125rem] text-ivory/70 md:px-20">
+      @if (image.badge) {
+        <span class="mr-2 rounded-xs bg-gold/25 px-2 py-0.5 text-[0.6875rem] text-gold-soft">
+          {{ image.badge }}
+        </span>
+      }
+      {{ image.alt }}
+    </p>
+  </div>
+}

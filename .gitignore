@@ -42,3 +42,13 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Source documents and photo originals. Nothing here is served — src/assets is
+# not in angular.json's assets config; served files live in public/. The
+# registration certificate in particular carries the owner's name and the
+# document verification password, and this repository is public.
+src/assets/
+
+# Firebase
+.firebase/
+firebase-debug.log

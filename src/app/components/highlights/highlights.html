@@ -1,0 +1,84 @@
+<section id="about" class="scroll-mt-20 bg-ivory py-20 md:py-28">
+  <div class="u-container">
+    <dl
+      class="grid grid-cols-2 gap-y-10 border-y border-charcoal/10 py-10 md:py-12 lg:grid-cols-4 lg:gap-y-0"
+    >
+      @for (item of highlights; track item.label; let i = $index) {
+        <div
+          class="px-2 text-center lg:px-6"
+          [class]="i > 0 ? 'lg:border-l lg:border-charcoal/10' : ''"
+          [appReveal]="i * 90"
+        >
+          <dt class="sr-only">{{ item.label }}</dt>
+          <dd>
+            <p class="font-display text-[1.75rem] font-medium text-forest md:text-4xl">
+              {{ item.value }}
+            </p>
+            <p class="mt-2 text-[0.8125rem] leading-snug text-charcoal-mute md:text-sm">
+              {{ item.label }}
+            </p>
+          </dd>
+        </div>
+      }
+    </dl>
+
+    <div class="mt-16 grid gap-12 lg:mt-20 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-7" appReveal>
+        <p class="u-eyebrow">Հողամասի մասին</p>
+        <div class="u-rule mt-4"></div>
+        <p
+          class="mt-7 font-display text-xl leading-[1.65] text-charcoal md:text-[1.4rem] md:leading-[1.7]"
+        >
+          {{ property.description }}
+        </p>
+      </div>
+
+      <div class="lg:col-span-5" [appReveal]="120">
+        <ul class="space-y-0">
+          @for (advantage of property.advantages; track advantage) {
+            <li
+              class="flex items-start gap-4 border-b border-charcoal/10 py-4 last:border-0"
+            >
+              <svg
+                class="mt-1 h-4 w-4 shrink-0 text-forest-soft"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m4 10.5 4 4 8-9" />
+              </svg>
+              <span class="text-[0.95rem] leading-relaxed text-charcoal-soft">
+                {{ advantage }}
+              </span>
+            </li>
+          }
+        </ul>
+
+        <dl class="mt-8 space-y-3 rounded-sm bg-ivory-deep p-6">
+          <div class="flex justify-between gap-4 text-sm">
+            <dt class="text-charcoal-mute">Նշանակությունը</dt>
+            <dd class="text-right font-medium text-charcoal">
+              {{ property.designation.land }}
+            </dd>
+          </div>
+          <div class="flex justify-between gap-4 text-sm">
+            <dt class="text-charcoal-mute">Գործառնական նշանակությունը</dt>
+            <dd class="text-right font-medium text-charcoal">
+              {{ property.designation.functional }}
+            </dd>
+          </div>
+          <div class="flex justify-between gap-4 text-sm">
+            <dt class="text-charcoal-mute">Իրավունքի տեսակը</dt>
+            <dd class="text-right font-medium text-charcoal">
+              {{ property.designation.ownership }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>

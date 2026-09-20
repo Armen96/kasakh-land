@@ -1,0 +1,35 @@
+<footer class="border-t border-charcoal/10 bg-ivory py-12">
+  <div class="u-container">
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="font-display text-base font-semibold tracking-[0.18em] text-charcoal">
+          {{ property.name }}
+        </p>
+        <p class="mt-1.5 text-[0.875rem] text-charcoal-mute">Քասախ, Հայաստան</p>
+      </div>
+
+      <a
+        href="#hero"
+        class="inline-flex items-center gap-2 self-start text-[0.875rem] text-charcoal-soft transition-colors hover:text-charcoal sm:self-auto"
+      >
+        <svg
+          class="h-3.5 w-3.5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="m5 14 7-7 7 7" />
+        </svg>
+        Վերև
+      </a>
+    </div>
+
+    <p class="mt-8 border-t border-charcoal/10 pt-6 text-[0.8125rem] text-charcoal-mute">
+      © {{ property.year }} {{ property.name }}
+    </p>
+  </div>
+</footer>

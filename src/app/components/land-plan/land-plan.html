@@ -1,0 +1,192 @@
+<section id="plan" class="scroll-mt-20 bg-ivory py-20 md:py-28">
+  <div class="u-container">
+    <div class="max-w-2xl" appReveal>
+      <p class="u-eyebrow">Հատակագիծ</p>
+      <div class="u-rule mt-4"></div>
+      <h2 class="mt-6 font-display text-3xl font-medium text-charcoal md:text-4xl">
+        Հողամասի հատակագիծը
+      </h2>
+      <p class="mt-4 text-[0.95rem] text-charcoal-soft">
+        Ծանոթացեք հողամասի չափերին և կառուցվածքին։
+      </p>
+    </div>
+
+    <div class="mt-12 grid gap-10 lg:grid-cols-12 lg:items-start lg:gap-14">
+      <div class="lg:col-span-8" appReveal>
+        <div class="rounded-sm border border-charcoal/10 bg-ivory-deep p-3 sm:p-6">
+          <svg
+            viewBox="0 0 640 520"
+            class="h-auto w-full"
+            role="img"
+            aria-label="Հողամասի սխեմատիկ հատակագիծը՝ ճակատային մասը 32 մետր, ձախ կողմը 38.9 մետր, հետին սահմանը 15.2 մետր, աջ կողմը 44.6 մետր"
+          >
+            <defs>
+              <pattern
+                id="plot-hatch"
+                width="8"
+                height="8"
+                patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)"
+              >
+                <line x1="0" y1="0" x2="0" y2="8" stroke="#3a6151" stroke-width="0.7" opacity="0.28" />
+              </pattern>
+            </defs>
+
+            <!-- Asphalt road running along the frontage -->
+            <rect x="40" y="100" width="72" height="380" rx="2" fill="#dcd7cc" />
+            <line
+              x1="76"
+              y1="118"
+              x2="76"
+              y2="462"
+              stroke="#faf8f4"
+              stroke-width="2.5"
+              stroke-dasharray="16 14"
+            />
+            <text
+              x="76"
+              y="290"
+              transform="rotate(-90 76 290)"
+              text-anchor="middle"
+              class="fill-charcoal-mute text-[15px] tracking-[0.18em]"
+            >
+              ԱՍՖԱԼՏԱՊԱՏ ՃԱՆԱՊԱՐՀ
+            </text>
+
+            <!-- Plot -->
+            <polygon
+              [attr.points]="polygonPoints"
+              fill="#1e3d32"
+              fill-opacity="0.07"
+              stroke="none"
+            />
+            <polygon [attr.points]="polygonPoints" fill="url(#plot-hatch)" stroke="none" />
+
+            <!-- Boundaries, drawn individually so each can highlight -->
+            <line
+              [attr.x1]="cornerA.x"
+              [attr.y1]="cornerA.y"
+              [attr.x2]="cornerD.x"
+              [attr.y2]="cornerD.y"
+              [attr.stroke]="activeEdge() === 'front' ? '#a8894f' : '#a8894f'"
+              [attr.stroke-width]="edgeWidth('front')"
+              stroke-linecap="round"
+            />
+            <line
+              [attr.x1]="cornerA.x"
+              [attr.y1]="cornerA.y"
+              [attr.x2]="cornerB.x"
+              [attr.y2]="cornerB.y"
+              [attr.stroke]="edgeStroke('left')"
+              [attr.stroke-width]="edgeWidth('left')"
+              stroke-linecap="round"
+            />
+            <line
+              [attr.x1]="cornerB.x"
+              [attr.y1]="cornerB.y"
+              [attr.x2]="cornerC.x"
+              [attr.y2]="cornerC.y"
+              [attr.stroke]="edgeStroke('rear')"
+              [attr.stroke-width]="edgeWidth('rear')"
+              stroke-linecap="round"
+            />
+            <line
+              [attr.x1]="cornerC.x"
+              [attr.y1]="cornerC.y"
+              [attr.x2]="cornerD.x"
+              [attr.y2]="cornerD.y"
+              [attr.stroke]="edgeStroke('right')"
+              [attr.stroke-width]="edgeWidth('right')"
+              stroke-linecap="round"
+            />
+
+            <!-- Corner markers -->
+            @for (corner of [cornerA, cornerB, cornerC, cornerD]; track $index) {
+              <circle [attr.cx]="corner.x" [attr.cy]="corner.y" r="4" fill="#1e3d32" />
+              <circle [attr.cx]="corner.x" [attr.cy]="corner.y" r="1.6" fill="#faf8f4" />
+            }
+
+            <!-- Frontage dimension line, between road and plot -->
+            <line x1="145" y1="159.7" x2="145" y2="447.7" stroke="#a8894f" stroke-width="1" />
+            <line x1="139" y1="159.7" x2="151" y2="159.7" stroke="#a8894f" stroke-width="1" />
+            <line x1="139" y1="447.7" x2="151" y2="447.7" stroke="#a8894f" stroke-width="1" />
+            <text
+              x="134"
+              y="303.7"
+              transform="rotate(-90 134 303.7)"
+              text-anchor="middle"
+              class="fill-gold text-[21px] font-semibold"
+            >
+              32 մ
+            </text>
+
+            <!-- Boundary length labels -->
+            <text x="346" y="106" text-anchor="middle" class="fill-charcoal text-[21px] font-semibold">
+              38.9 մ
+            </text>
+            <text x="562" y="190" text-anchor="start" class="fill-charcoal text-[21px] font-semibold">
+              15.2 մ
+            </text>
+            <text x="368" y="385" text-anchor="middle" class="fill-charcoal text-[21px] font-semibold">
+              44.6 մ
+            </text>
+
+            <!-- Area -->
+            <text
+              [attr.x]="centroid.x"
+              [attr.y]="centroid.y - 4"
+              text-anchor="middle"
+              class="fill-forest text-[38px] font-semibold"
+            >
+              917 քմ
+            </text>
+            <text
+              [attr.x]="centroid.x"
+              [attr.y]="centroid.y + 20"
+              text-anchor="middle"
+              class="fill-charcoal-mute text-[15px] tracking-[0.12em]"
+            >
+              ՀՈՂԱՄԱՍԻ ՄԱԿԵՐԵՍ
+            </text>
+          </svg>
+        </div>
+
+        <p class="mt-4 text-[0.75rem] leading-relaxed text-charcoal-mute">
+          Հատակագիծը ներկայացված է տեղեկատվական նպատակով։ Հողամասի ճշգրիտ
+          սահմանները սահմանվում են կադաստրային փաստաթղթերով։
+        </p>
+      </div>
+
+      <div class="lg:col-span-4" [appReveal]="120">
+        <h3 class="u-eyebrow text-charcoal-mute">Սահմանների չափերը</h3>
+        <dl class="mt-5 border-t border-charcoal/10">
+          @for (edge of property.boundaries; track edge.id) {
+            <div
+              class="flex items-baseline justify-between gap-4 border-b border-charcoal/10 py-4 transition-colors duration-200 hover:bg-ivory-deep"
+              (mouseenter)="setActive(edge.id)"
+              (mouseleave)="setActive(null)"
+            >
+              <dt class="text-[0.875rem] text-charcoal-soft">{{ edge.label }}</dt>
+              <dd class="shrink-0 font-display text-lg font-medium text-charcoal">
+                {{ edge.metres }} մ
+              </dd>
+            </div>
+          }
+          <div class="flex items-baseline justify-between gap-4 py-4">
+            <dt class="text-[0.875rem] font-medium text-charcoal">Ընդհանուր մակերես</dt>
+            <dd class="shrink-0 font-display text-lg font-medium text-forest">
+              {{ property.area.display }}
+            </dd>
+          </div>
+        </dl>
+
+        <div class="mt-6 rounded-sm bg-forest px-6 py-5 text-ivory">
+          <p class="text-[0.8125rem] leading-relaxed text-ivory/85">
+            Հողամասն ունի 32 մետր լայն ճակատային մաս ասֆալտապատ ճանապարհի
+            երկայնքով, ինչը հարմար է բնակելի կառուցապատման համար։
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

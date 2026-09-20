@@ -1,59 +1,100 @@
-# KasakhLand
+# KASAKH 917
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.24.
+Single-page property site for the sale of a 917 m² residential plot in Kasakh,
+Kotayk Province, Armenia. Angular 21 standalone components, Tailwind CSS v4,
+prerendered to static HTML, deployed to Firebase Hosting.
 
-## Development server
+## Editing the listing
 
-To start a local development server, run:
+Everything an owner normally changes lives in **`src/app/property.config.ts`** —
+price, address, boundary lengths, gallery photographs, map URL and contact
+details. No component template needs editing.
 
-```bash
-ng serve
+### Contact details
+
+`contact.phone`, `contact.whatsapp` and `contact.telegram` are `null` until
+configured. Any channel left `null` is hidden rather than rendered as a dead
+link, and while all three are `null` the contact section shows a notice instead
+of buttons.
+
+```ts
+contact: {
+  phone: '+374XXXXXXXX',     // E.164
+  whatsapp: '374XXXXXXXX',   // digits only, no '+'
+  telegram: 'username',      // without '@'
+}
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Map
 
-## Code scaffolding
+`location.mapEmbedUrl` is `null` until exact coordinates are verified. While it
+is `null` the map panel shows a labelled notice, and "Բացել Google Maps-ում"
+performs an address search rather than dropping a pin at a guessed point.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Photographs
 
-```bash
-ng generate component component-name
-```
+Add entries to `gallery`. Only real photographs of the property belong there;
+anything that is not a photograph of the land (for example a visualization)
+must carry a `badge`, e.g. `badge: 'Պատկերավոր վիզուալիզացիա'`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Responsive variants are optional — set `srcset` when they exist, otherwise
+`src` is used alone. The hero variants were produced with:
 
 ```bash
-ng build
+for w in 640 960; do
+  sips -Z $w -s format jpeg -s formatOptions 80 \
+    public/images/land-main-top.jpg --out public/images/land-main-top-$w.jpg
+done
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Commands
 
 ```bash
-ng test
+npm install
+npm start          # dev server at http://localhost:4200
+npm run build      # production build + prerender → dist/kasakh-land/browser
+npm test           # unit tests
 ```
 
-## Running end-to-end tests
+## Deployment — Firebase Hosting
 
-For end-to-end (e2e) testing, run:
+`outputMode: "static"` prerenders the page to plain HTML, so Hosting serves
+static files with no Node runtime and no SPA rewrites.
+
+The Firebase project does **not** exist yet. First time only:
 
 ```bash
-ng e2e
+npm i -g firebase-tools
+firebase login
+firebase projects:create kasakh917        # or create it in the Firebase console
+firebase use kasakh917
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Then, for every release:
 
-## Additional Resources
+```bash
+npm run build
+firebase deploy --only hosting
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The site publishes to `https://kasakh917.web.app`. If a different project id is
+used, update `.firebaserc` and the `siteUrl` in `property.config.ts`, plus the
+canonical and Open Graph URLs in `src/index.html`.
+
+## Private documents
+
+`src/assets/QASAX.pdf` — the state registration certificate — is **gitignored**
+and excluded from the build. It contains the owner's name, the certificate
+number and its verification password. Do not commit it and do not publish it:
+this repository is public. Only the boundary dimensions derived from it appear
+on the site.
+
+## Land plan geometry
+
+The certificate contains no cadastral boundary drawing. The SVG in
+`src/app/components/land-plan/land-plan.ts` is **schematic**: the arrangement of
+the four sides was taken from the plot outline on the aerial photograph, then a
+closed quadrilateral carrying the documented lengths (32.0 / 38.9 / 15.2 /
+44.6 m) was solved for it. It is labelled as informational on the page and is
+not a survey-accurate boundary. Replace the vertices if an official cadastral
+plan becomes available.

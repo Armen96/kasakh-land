@@ -1,0 +1,91 @@
+<section
+  id="hero"
+  class="relative flex min-h-[38rem] flex-col justify-end overflow-hidden bg-forest-deep md:min-h-screen"
+>
+  <!--
+    The hero photograph is the LCP element: eager, high priority, and never
+    lazy-loaded. Sized to the viewport via object-cover.
+  -->
+  <img
+    [src]="heroImage.src"
+    [attr.srcset]="heroImage.srcset ?? null"
+    sizes="100vw"
+    [alt]="heroImage.alt"
+    [width]="heroImage.width"
+    [height]="heroImage.height"
+    fetchpriority="high"
+    decoding="async"
+    class="absolute inset-0 h-full w-full object-cover"
+  />
+
+  <!-- Readability scrim: strongest at the bottom where the text sits. -->
+  <div
+    class="absolute inset-0 bg-gradient-to-t from-charcoal/92 via-charcoal/55 to-charcoal/35"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-transparent to-transparent"
+    aria-hidden="true"
+  ></div>
+
+  <div class="u-container relative z-10 pt-28 pb-16 md:pb-24 lg:pb-28">
+    <div class="max-w-3xl">
+      <p class="u-eyebrow text-gold-soft">ՎԱՃԱՌՎՈՒՄ Է</p>
+
+      <h1
+        class="mt-5 font-display text-[2.1rem] leading-[1.18] font-medium text-ivory sm:text-5xl lg:text-[4rem] lg:leading-[1.1]"
+      >
+        917 քմ հողատարածք Քասախում
+      </h1>
+
+      <p class="mt-5 max-w-xl text-[1.0625rem] text-ivory/80 sm:text-lg">
+        32 մետր լայն ճակատային մաս՝ բնակելի կառուցապատման համար
+      </p>
+
+      <div class="mt-8 flex flex-wrap items-end gap-x-8 gap-y-3">
+        <p class="font-display text-4xl font-medium text-ivory sm:text-5xl">
+          {{ property.price.display }}
+        </p>
+        <p class="flex items-center gap-2 pb-1.5 text-sm text-ivory/70">
+          <svg
+            class="h-4 w-4 shrink-0 text-gold-soft"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.6"
+            aria-hidden="true"
+          >
+            <path d="M12 21s-7-5.4-7-11a7 7 0 1 1 14 0c0 5.6-7 11-7 11z" />
+            <circle cx="12" cy="10" r="2.5" />
+          </svg>
+          {{ property.location.short }}
+        </p>
+      </div>
+
+      <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:gap-4">
+        <a
+          href="#gallery"
+          class="rounded-sm bg-ivory px-7 py-3.5 text-center text-[0.95rem] font-medium text-forest transition-colors duration-300 hover:bg-white"
+        >
+          Դիտել հողամասը
+        </a>
+        @if (hasContact) {
+          <a
+            href="#contact"
+            class="rounded-sm border border-ivory/45 px-7 py-3.5 text-center text-[0.95rem] font-medium text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+          >
+            Կապ հաստատել
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+
+  <a
+    href="#about"
+    class="relative z-10 mx-auto mb-6 hidden h-10 w-6 items-start justify-center rounded-full border border-ivory/35 pt-2 md:flex"
+    aria-label="Ոլորել ներքև"
+  >
+    <span class="block h-1.5 w-px animate-bounce bg-ivory/70"></span>
+  </a>
+</section>
