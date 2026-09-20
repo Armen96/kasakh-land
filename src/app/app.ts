@@ -8,7 +8,6 @@ import { Hero } from './components/hero/hero';
 import { Highlights } from './components/highlights/highlights';
 import { LandPlan } from './components/land-plan/land-plan';
 import { Location } from './components/location/location';
-import { HAS_CONTACT } from './property.config';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +25,4 @@ import { HAS_CONTACT } from './property.config';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {
-  /** Reserves space under the sticky mobile contact bar. */
-  protected readonly hasContact = HAS_CONTACT;
-}
+export class App {}
