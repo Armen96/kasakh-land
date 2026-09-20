@@ -109,22 +109,28 @@ on the site.
 
 ## Land plan geometry
 
-The certificate contains no cadastral boundary drawing. The SVG in
-`src/app/components/land-plan/land-plan.ts` is **schematic**: the arrangement of
-the four sides was taken from the plot outline on the aerial photograph, then a
-closed quadrilateral carrying the documented lengths (32.0 / 38.9 / 15.2 /
-44.6 m) was solved for it, choosing the solution whose enclosed area lands on
-the registered 910 m².
+Taken from the official cadastral plan (ՀՈՂԱՄԱՍԻ ՀԱՏԱԿԱԳԻԾԸ, 1:1000). That
+drawing renders sides 1–2 (32.0 m, marked «Ճանապարհի») and 3–4 (15.2 m) both
+horizontal, i.e. the plot is a trapezoid with the road frontage parallel to the
+rear boundary — which those four lengths do admit. Solving it is exact:
 
-The polygon is then rotated 8.05° so the 38.9 m side runs exactly horizontally.
-Rotation preserves every length and interior angle — it only changes how the
-drawing sits on the page — so the road is drawn at its true angle to that side
-rather than forced vertical. The four lengths cannot form a trapezoid with the
-38.9 m and 44.6 m sides parallel (15.2 + 5.7 < 32), so a straight, horizontal
-38.9 m side is as close to "parallel" as the real geometry allows.
+| Corner | Position | x | y |
+|---|---|---:|---:|
+| 2 | south-west, on the road | 5.765 | 0 |
+| 1 | south-east, on the road | 37.765 | 0 |
+| 3 | north-west | 0 | 38.47 |
+| 4 | north-east | 15.2 | 38.47 |
 
-It is labelled as informational on the page and is not a survey-accurate
-boundary. Replace the vertices if an official cadastral plan becomes available.
+All four sides come out at the documented lengths to three decimals, and the
+enclosed area is 907.9 m² — within 0.23% of the registered 910 m², an
+independent check that the construction is right. The registered figure is what
+the page displays; the small gap is drawing tolerance.
+
+Vertex numbering and orientation match the cadastral plan, so the SVG and the
+scanned plan (in the gallery) can be read side by side.
+
+The scan is cropped before publication: it keeps the title, diagram and
+dimensions table, and drops the preparer's signature and the official seal.
 
 ## Analytics
 
@@ -144,3 +150,14 @@ page source of every GA4 site.
 The tag is skipped when `isDevMode()` is true, so local work does not reach the
 statistics. Note that GA4 sets cookies — if the listing is ever aimed at EU
 visitors, a consent notice would be needed.
+
+## Icons
+
+`public/favicon.svg` is the source: the plot's own trapezoid silhouette, with
+the 32 m road frontage picked out in gold. It is solid rather than outlined so
+the shape still reads at 16px.
+
+`favicon.ico` (16/32/48, PNG-encoded), `apple-touch-icon.png` (180),
+`icon-512.png` and `site.webmanifest` are generated from it. To regenerate
+after editing the SVG, render it at each size and repack the .ico — there is no
+build step wired up for this, since it changes about as often as the brand.

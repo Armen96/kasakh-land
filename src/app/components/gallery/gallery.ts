@@ -10,9 +10,6 @@ import {
 import { GalleryImage, PROPERTY } from '../../property.config';
 import { RevealDirective } from '../../shared/reveal.directive';
 
-/** Below this many photographs the grid shows a "more coming" placeholder. */
-const MIN_TILES = 4;
-
 /** Horizontal travel, in px, that counts as a swipe rather than a tap. */
 const SWIPE_THRESHOLD = 48;
 
@@ -26,16 +23,6 @@ export class Gallery {
   protected readonly images = PROPERTY.gallery;
   protected readonly featured = PROPERTY.gallery[0];
   protected readonly rest = PROPERTY.gallery.slice(1);
-
-  /**
-   * Placeholder tiles keep the grid balanced while photographs are still being
-   * collected. They are labelled as placeholders — never as property photos.
-   */
-  protected readonly placeholderCount = Math.max(0, MIN_TILES - this.images.length);
-  protected readonly placeholders = Array.from(
-    { length: this.placeholderCount },
-    (_, i) => i,
-  );
 
   /** Index of the open lightbox slide, or null when closed. */
   protected readonly openIndex = signal<number | null>(null);

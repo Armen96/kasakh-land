@@ -15,10 +15,10 @@
       <div class="lg:col-span-8" appReveal>
         <div class="rounded-sm border border-charcoal/10 bg-ivory-deep p-3 sm:p-6">
           <svg
-            viewBox="0 0 690 510"
+            viewBox="0 0 560 540"
             class="h-auto w-full"
             role="img"
-            aria-label="Հողամասի սխեմատիկ հատակագիծը՝ ճակատային մասը 32 մետր, ձախ կողմը 38.9 մետր, հետին սահմանը 15.2 մետր, աջ կողմը 44.6 մետր"
+            aria-label="Հողամասի հատակագիծը՝ ճակատային մասը 32 մետր, ձախ կողմը 38.9 մետր, հետին սահմանը 15.2 մետր, աջ կողմը 44.6 մետր"
           >
             <defs>
               <pattern
@@ -32,21 +32,35 @@
               </pattern>
             </defs>
 
-            <!-- Asphalt road, parallel to the frontage at its true angle -->
-            <polygon [attr.points]="road.points" fill="#dcd7cc" />
+            <!-- Asphalt road, along the 1-2 frontage -->
+            <rect
+              [attr.x]="road.x"
+              [attr.y]="road.y"
+              [attr.width]="road.width"
+              [attr.height]="road.height"
+              rx="2"
+              fill="#dcd7cc"
+            />
             <line
-              [attr.x1]="road.centreFrom.x"
-              [attr.y1]="road.centreFrom.y"
-              [attr.x2]="road.centreTo.x"
-              [attr.y2]="road.centreTo.y"
+              [attr.x1]="road.x + 18"
+              [attr.y1]="road.dashY"
+              [attr.x2]="road.x + road.width - 18"
+              [attr.y2]="road.dashY"
               stroke="#faf8f4"
               stroke-width="2.5"
               stroke-dasharray="16 14"
             />
+            <!-- Knocks the centre line out from behind the label -->
+            <rect
+              [attr.x]="road.labelX - 62"
+              [attr.y]="road.dashY - 11"
+              width="124"
+              height="22"
+              fill="#dcd7cc"
+            />
             <text
-              [attr.x]="road.label.x"
-              [attr.y]="road.label.y"
-              [attr.transform]="'rotate(' + road.angle + ' ' + road.label.x + ' ' + road.label.y + ')'"
+              [attr.x]="road.labelX"
+              [attr.y]="road.labelY"
               text-anchor="middle"
               class="fill-charcoal-mute text-[15px] tracking-[0.18em]"
             >
@@ -59,77 +73,88 @@
 
             <!-- Boundaries, drawn individually so each can highlight -->
             <line
-              [attr.x1]="cornerA.x"
-              [attr.y1]="cornerA.y"
-              [attr.x2]="cornerD.x"
-              [attr.y2]="cornerD.y"
+              [attr.x1]="corner1.x"
+              [attr.y1]="corner1.y"
+              [attr.x2]="corner2.x"
+              [attr.y2]="corner2.y"
               stroke="#a8894f"
               [attr.stroke-width]="edgeWidth('front')"
               stroke-linecap="round"
             />
             <line
-              [attr.x1]="cornerA.x"
-              [attr.y1]="cornerA.y"
-              [attr.x2]="cornerB.x"
-              [attr.y2]="cornerB.y"
+              [attr.x1]="corner2.x"
+              [attr.y1]="corner2.y"
+              [attr.x2]="corner3.x"
+              [attr.y2]="corner3.y"
               [attr.stroke]="edgeStroke('left')"
               [attr.stroke-width]="edgeWidth('left')"
               stroke-linecap="round"
             />
             <line
-              [attr.x1]="cornerB.x"
-              [attr.y1]="cornerB.y"
-              [attr.x2]="cornerC.x"
-              [attr.y2]="cornerC.y"
+              [attr.x1]="corner3.x"
+              [attr.y1]="corner3.y"
+              [attr.x2]="corner4.x"
+              [attr.y2]="corner4.y"
               [attr.stroke]="edgeStroke('rear')"
               [attr.stroke-width]="edgeWidth('rear')"
               stroke-linecap="round"
             />
             <line
-              [attr.x1]="cornerC.x"
-              [attr.y1]="cornerC.y"
-              [attr.x2]="cornerD.x"
-              [attr.y2]="cornerD.y"
+              [attr.x1]="corner4.x"
+              [attr.y1]="corner4.y"
+              [attr.x2]="corner1.x"
+              [attr.y2]="corner1.y"
               [attr.stroke]="edgeStroke('right')"
               [attr.stroke-width]="edgeWidth('right')"
               stroke-linecap="round"
             />
 
-            <!-- Corner markers -->
-            @for (corner of corners; track $index) {
-              <circle [attr.cx]="corner.x" [attr.cy]="corner.y" r="4" fill="#1e3d32" />
-              <circle [attr.cx]="corner.x" [attr.cy]="corner.y" r="1.6" fill="#faf8f4" />
+            <!-- Corner markers and their cadastral numbers -->
+            @for (corner of corners; track corner.id) {
+              <circle [attr.cx]="corner.point.x" [attr.cy]="corner.point.y" r="4" fill="#1e3d32" />
+              <circle [attr.cx]="corner.point.x" [attr.cy]="corner.point.y" r="1.6" fill="#faf8f4" />
+            }
+            @for (label of cornerLabels; track label.id) {
+              <text
+                [attr.x]="label.point.x"
+                [attr.y]="label.point.y + 5"
+                text-anchor="middle"
+                class="fill-charcoal-mute text-[15px] font-semibold"
+              >
+                {{ label.id }}
+              </text>
             }
 
             <!-- Boundary length labels -->
             <text
-              [attr.x]="labels.front.x"
-              [attr.y]="labels.front.y"
-              [attr.transform]="'rotate(' + frontageAngle + ' ' + labels.front.x + ' ' + labels.front.y + ')'"
+              [attr.x]="labels.front.at.x"
+              [attr.y]="labels.front.at.y"
               text-anchor="middle"
               class="fill-gold text-[21px] font-semibold"
             >
-              32 մ
+              32.0 մ
             </text>
             <text
-              [attr.x]="labels.left.x"
-              [attr.y]="labels.left.y"
+              [attr.x]="labels.left.at.x"
+              [attr.y]="labels.left.at.y"
+              [attr.transform]="'rotate(' + labels.left.angle + ' ' + labels.left.at.x + ' ' + labels.left.at.y + ')'"
               text-anchor="middle"
               class="fill-charcoal text-[21px] font-semibold"
             >
               38.9 մ
             </text>
             <text
-              [attr.x]="labels.rear.x"
-              [attr.y]="labels.rear.y"
-              text-anchor="start"
+              [attr.x]="labels.rear.at.x"
+              [attr.y]="labels.rear.at.y"
+              text-anchor="middle"
               class="fill-charcoal text-[21px] font-semibold"
             >
               15.2 մ
             </text>
             <text
-              [attr.x]="labels.right.x"
-              [attr.y]="labels.right.y"
+              [attr.x]="labels.right.at.x"
+              [attr.y]="labels.right.at.y"
+              [attr.transform]="'rotate(' + labels.right.angle + ' ' + labels.right.at.x + ' ' + labels.right.at.y + ')'"
               text-anchor="middle"
               class="fill-charcoal text-[21px] font-semibold"
             >
@@ -157,8 +182,9 @@
         </div>
 
         <p class="mt-4 text-[0.75rem] leading-relaxed text-charcoal-mute">
-          Հատակագիծը ներկայացված է տեղեկատվական նպատակով։ Հողամասի ճշգրիտ
-          սահմանները սահմանվում են կադաստրային փաստաթղթերով։
+          Հատակագիծը կազմված է պաշտոնական կադաստրային հատակագծի հիման վրա և
+          ներկայացված է տեղեկատվական նպատակով։ Հողամասի ճշգրիտ սահմանները
+          սահմանվում են կադաստրային փաստաթղթերով։
         </p>
       </div>
 

@@ -34,7 +34,7 @@
       </figcaption>
     </figure>
 
-    @if (rest.length > 0 || placeholders.length > 0) {
+    @if (rest.length > 0) {
       <div class="mt-5 grid grid-cols-2 gap-4 md:mt-6 md:grid-cols-3 md:gap-6">
         @for (image of rest; track image.src; let i = $index) {
           <figure [appReveal]="i * 70">
@@ -68,27 +68,6 @@
           </figure>
         }
 
-        @for (slot of placeholders; track slot) {
-          <div
-            class="flex aspect-4/3 flex-col items-center justify-center gap-2 rounded-sm border border-dashed border-charcoal/20 bg-ivory px-4 text-center"
-          >
-            <svg
-              class="h-5 w-5 text-charcoal/25"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="1.5"
-              aria-hidden="true"
-            >
-              <rect x="3" y="5" width="18" height="14" rx="2" />
-              <circle cx="8.5" cy="10" r="1.5" />
-              <path d="m21 16-5-5-4.5 4.5" />
-            </svg>
-            <p class="text-[0.75rem] leading-snug text-charcoal-mute">
-              Լուսանկարը շուտով կավելացվի
-            </p>
-          </div>
-        }
       </div>
     }
   </div>

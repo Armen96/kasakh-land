@@ -1,6 +1,7 @@
 <section id="contact" class="scroll-mt-20 bg-forest py-20 text-ivory md:py-28">
   <div class="u-container">
-    <div class="mx-auto max-w-2xl text-center" appReveal>
+    <div appReveal>
+      <div class="mx-auto max-w-2xl text-center">
       <p class="u-eyebrow text-gold-soft">Կապ</p>
       <h2 class="mt-6 font-display text-3xl font-medium md:text-[2.5rem] md:leading-tight">
         Հետաքրքրվա՞ծ եք հողամասով
@@ -16,14 +17,15 @@
           {{ property.price.display }}
         </p>
       </div>
+      </div>
 
       @if (hasContact) {
-        <div class="mt-10 flex flex-col gap-3 sm:flex-row sm:justify-center">
+        <div class="mx-auto mt-10 flex max-w-3xl flex-col gap-3 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-4">
           @if (telHref) {
             <a
               [href]="telHref"
               (click)="track('phone')"
-              class="inline-flex items-center justify-center gap-2.5 rounded-sm bg-ivory px-7 py-4 text-[0.9375rem] font-medium text-forest transition-colors duration-300 hover:bg-white"
+              class="inline-flex items-center justify-center gap-2.5 rounded-sm bg-ivory px-8 py-4.5 text-[0.9375rem] font-medium whitespace-nowrap text-forest transition-colors duration-300 hover:bg-white"
             >
               <svg
                 class="h-4 w-4"
@@ -48,7 +50,7 @@
               (click)="track('whatsapp')"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-7 py-4 text-[0.9375rem] font-medium text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-8 py-4.5 text-[0.9375rem] font-medium whitespace-nowrap text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
             >
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path
@@ -64,7 +66,7 @@
               (click)="track('telegram')"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-7 py-4 text-[0.9375rem] font-medium text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-8 py-4.5 text-[0.9375rem] font-medium whitespace-nowrap text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
             >
               <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                 <path
@@ -78,7 +80,7 @@
             <a
               [href]="emailHref"
               (click)="track('email')"
-              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-7 py-4 text-[0.9375rem] font-medium text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-8 py-4.5 text-[0.9375rem] font-medium whitespace-nowrap text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
             >
               <svg
                 class="h-4 w-4"
@@ -102,7 +104,7 @@
           No contact channel is configured yet. A labelled notice is shown
           instead of a button that would not do anything.
         -->
-        <div class="mt-10 rounded-sm border border-dashed border-ivory/30 px-6 py-7">
+        <div class="mx-auto mt-10 max-w-2xl rounded-sm border border-dashed border-ivory/30 px-6 py-7 text-center">
           <p class="text-[0.9375rem] leading-relaxed text-ivory/75">
             Կապի տվյալները կավելացվեն շուտով։
           </p>

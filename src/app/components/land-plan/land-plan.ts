@@ -3,36 +3,38 @@ import { PROPERTY } from '../../property.config';
 import { RevealDirective } from '../../shared/reveal.directive';
 
 /**
- * Schematic plot geometry.
+ * Plot geometry, taken from the official cadastral plan (ՀՈՂԱՄԱՍԻ ՀԱՏԱԿԱԳԻԾԸ,
+ * 1:1000) supplied by the owner.
  *
- * The registration certificate contains no cadastral boundary drawing, so
- * these vertices are NOT surveyed coordinates. They were derived by taking the
- * plot outline visible on the aerial photograph to fix the arrangement of the
- * four sides, then solving a closed quadrilateral that carries the documented
- * boundary lengths (32.0 / 38.9 / 15.2 / 44.6 m). The solution was chosen so
- * the enclosed area lands on the registered 910 m² (it comes out at 911.2).
+ * That drawing renders sides 1–2 (32.0 m, marked «Ճանապարհի») and 3–4 (15.2 m)
+ * both horizontal — i.e. the plot is a trapezoid with the road frontage
+ * parallel to the rear boundary. Those four documented lengths do admit such a
+ * trapezoid, and solving it is exact:
  *
- * The whole polygon is then rotated 8.05° so the 38.9 m side runs exactly
- * horizontally. Rotation preserves every length and interior angle — it only
- * changes how the drawing sits on the page — so the road, which follows the
- * frontage, is drawn at its true angle to that side rather than forced
- * vertical.
+ *   2 = (5.765,  0    )   south-west, on the road
+ *   1 = (37.765, 0    )   south-east, on the road
+ *   3 = (0,      38.47)   north-west
+ *   4 = (15.2,   38.47)   north-east
  *
- * The drawing is therefore schematic: correct in arrangement, carrying
- * documented lengths, but not a survey-accurate boundary. Replace these
- * values if an official cadastral plan becomes available.
+ * All four sides come out at the documented lengths to three decimals, and the
+ * enclosed area is 907.9 m² — within 0.23% of the registered 910 m², which is
+ * an independent check the construction is right. The registered figure is
+ * what the page displays; the small gap is drawing tolerance.
  *
- * Local frame: metres, x right, y up, origin at the southern road corner.
+ * Vertex numbering and orientation match the cadastral plan so the two can be
+ * read side by side — that plan is in the gallery.
+ *
+ * Local frame: metres, x right, y up.
  */
 interface Point {
   readonly x: number;
   readonly y: number;
 }
 
-const SCALE = 10;
-const OFFSET_X = 150;
-const OFFSET_Y = 110;
-const MAX_NORTHING = 31.685;
+const SCALE = 9;
+const OFFSET_X = 130;
+const OFFSET_Y = 60;
+const MAX_NORTHING = 38.47;
 
 const toSvg = (xm: number, ym: number): Point => ({
   x: OFFSET_X + xm * SCALE,
@@ -44,7 +46,6 @@ const round = (p: Point): Point => ({
   y: Math.round(p.y * 10) / 10,
 });
 
-/** Unit vector from `a` to `b`, in SVG space. */
 const unit = (a: Point, b: Point): Point => {
   const dx = b.x - a.x;
   const dy = b.y - a.y;
@@ -63,12 +64,21 @@ const shift = (p: Point, direction: Point, distance: number): Point => ({
 });
 
 /**
- * Outward normal of edge a→b, for a polygon wound A → B → C → D in SVG space
- * (y down). Rotating the edge direction by −90° points away from the interior.
+ * Outward normal of edge a→b for a ring wound 1 → 2 → 3 → 4 in SVG space
+ * (y down). Check against the frontage: 1→2 runs in −x, so this returns +y,
+ * which points down — away from the plot, toward the road.
  */
 const outward = (a: Point, b: Point): Point => {
   const u = unit(a, b);
   return { x: u.y, y: -u.x };
+};
+
+/** Degrees of rotation that keep a label reading along its edge. */
+const along = (a: Point, b: Point): number => {
+  let deg = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI;
+  if (deg > 90) deg -= 180;
+  if (deg < -90) deg += 180;
+  return Math.round(deg * 10) / 10;
 };
 
 @Component({
@@ -80,87 +90,68 @@ const outward = (a: Point, b: Point): Point => {
 export class LandPlan {
   protected readonly property = PROPERTY;
 
-  /** Walk order A → B → C → D; A and D sit on the road. */
-  protected readonly cornerA = toSvg(4.481, 31.685);
-  protected readonly cornerB = toSvg(43.382, 31.685);
-  protected readonly cornerC = toSvg(41.386, 16.629);
-  protected readonly cornerD = toSvg(0, 0);
+  /** Numbered as on the cadastral plan; the ring is wound 1 → 2 → 3 → 4. */
+  protected readonly corner1 = toSvg(37.765, 0);
+  protected readonly corner2 = toSvg(5.765, 0);
+  protected readonly corner3 = toSvg(0, 38.47);
+  protected readonly corner4 = toSvg(15.2, 38.47);
 
   protected readonly corners = [
-    this.cornerA,
-    this.cornerB,
-    this.cornerC,
-    this.cornerD,
+    { id: '1', point: this.corner1 },
+    { id: '2', point: this.corner2 },
+    { id: '3', point: this.corner3 },
+    { id: '4', point: this.corner4 },
   ];
 
   protected readonly polygonPoints = this.corners
-    .map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`)
+    .map(({ point }) => `${point.x.toFixed(1)},${point.y.toFixed(1)}`)
     .join(' ');
 
   protected readonly centroid = round({
-    x: this.corners.reduce((sum, p) => sum + p.x, 0) / 4,
-    y: this.corners.reduce((sum, p) => sum + p.y, 0) / 4,
+    x: this.corners.reduce((sum, c) => sum + c.point.x, 0) / 4,
+    y: this.corners.reduce((sum, c) => sum + c.point.y, 0) / 4,
   });
 
-  /** Along the frontage, pointing from the northern corner to the southern. */
-  private readonly frontageDir = unit(this.cornerA, this.cornerD);
-  /** Away from the plot, i.e. toward the road. */
-  private readonly frontageOut = outward(this.cornerD, this.cornerA);
+  /** Vertex number badges, nudged outward from the plot. */
+  protected readonly cornerLabels = this.corners.map(({ id, point }) => ({
+    id,
+    point: round(shift(point, unit(this.centroid, point), 17)),
+  }));
 
-  /** Road drawn as a band parallel to the frontage, at its true angle. */
+  /** Road band, running along the 1–2 frontage. */
   protected readonly road = (() => {
-    const head = shift(this.cornerA, this.frontageDir, -45);
-    const tail = shift(this.cornerD, this.frontageDir, 45);
-    const near = [head, tail].map((p) => shift(p, this.frontageOut, 58));
-    const far = [tail, head].map((p) => shift(p, this.frontageOut, 122));
-    const ring = [...near, ...far].map(round);
-
+    const frontTop = this.corner1.y;
     return {
-      points: ring.map((p) => `${p.x},${p.y}`).join(' '),
-      centreFrom: round(midpoint(ring[0], ring[3])),
-      centreTo: round(midpoint(ring[1], ring[2])),
-      label: round(
-        midpoint(midpoint(ring[0], ring[3]), midpoint(ring[1], ring[2])),
-      ),
-      /** Degrees, so the label reads up the road rather than upside down. */
-      angle:
-        Math.round(
-          (Math.atan2(this.frontageDir.y, this.frontageDir.x) * 180) / Math.PI -
-            180,
-        ) * 1,
+      x: 96,
+      y: frontTop + 46,
+      width: 400,
+      height: 56,
+      dashY: Math.round(frontTop + 46 + 28),
+      labelX: 296,
+      labelY: Math.round(frontTop + 46 + 34),
     };
   })();
 
   /** Dimension label anchors, each pushed clear of its own edge. */
   protected readonly labels = {
-    front: round(
-      shift(midpoint(this.cornerD, this.cornerA), this.frontageOut, 26),
-    ),
-    left: round(
-      shift(
-        midpoint(this.cornerA, this.cornerB),
-        outward(this.cornerA, this.cornerB),
-        22,
-      ),
-    ),
-    rear: round(
-      shift(
-        midpoint(this.cornerB, this.cornerC),
-        outward(this.cornerB, this.cornerC),
-        30,
-      ),
-    ),
-    right: round(
-      shift(
-        midpoint(this.cornerC, this.cornerD),
-        outward(this.cornerC, this.cornerD),
-        30,
-      ),
-    ),
+    front: {
+      at: round(shift(midpoint(this.corner1, this.corner2), outward(this.corner1, this.corner2), 26)),
+      angle: 0,
+    },
+    left: {
+      at: round(shift(midpoint(this.corner2, this.corner3), outward(this.corner2, this.corner3), 32)),
+      // Less 180° so the near-vertical label reads bottom-to-top.
+      angle: Math.round((along(this.corner2, this.corner3) - 180) * 10) / 10,
+    },
+    rear: {
+      at: round(shift(midpoint(this.corner3, this.corner4), outward(this.corner3, this.corner4), 24)),
+      angle: 0,
+    },
+    right: {
+      at: round(shift(midpoint(this.corner4, this.corner1), outward(this.corner4, this.corner1), 32)),
+      angle: along(this.corner4, this.corner1),
+    },
   };
-
-  /** Rotation for the frontage label, matching the road. */
-  protected readonly frontageAngle = this.road.angle;
 
   /** Highlights the matching boundary when a table row is hovered. */
   protected readonly activeEdge = signal<string | null>(null);

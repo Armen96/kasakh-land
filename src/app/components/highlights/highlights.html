@@ -5,13 +5,13 @@
     >
       @for (item of highlights; track item.label; let i = $index) {
         <div
-          class="px-2 text-center lg:px-6"
+          class="px-1 text-center sm:px-2 lg:px-6"
           [class]="i > 0 ? 'lg:border-l lg:border-charcoal/10' : ''"
           [appReveal]="i * 90"
         >
           <dt class="sr-only">{{ item.label }}</dt>
           <dd>
-            <p class="font-display text-[1.75rem] font-medium text-forest md:text-4xl">
+            <p class="font-display text-[1.375rem] font-medium text-forest sm:text-[1.75rem] md:text-4xl">
               {{ item.value }}
             </p>
             <p class="mt-2 text-[0.8125rem] leading-snug text-charcoal-mute md:text-sm">
@@ -59,21 +59,21 @@
         </ul>
 
         <dl class="mt-8 space-y-3 rounded-sm bg-ivory-deep p-6">
-          <div class="flex justify-between gap-4 text-sm">
+          <div class="flex flex-col gap-0.5 text-sm sm:flex-row sm:justify-between sm:gap-4">
             <dt class="text-charcoal-mute">Նշանակությունը</dt>
-            <dd class="text-right font-medium text-charcoal">
+            <dd class="font-medium text-charcoal sm:text-right">
               {{ property.designation.land }}
             </dd>
           </div>
-          <div class="flex justify-between gap-4 text-sm">
+          <div class="flex flex-col gap-0.5 text-sm sm:flex-row sm:justify-between sm:gap-4">
             <dt class="text-charcoal-mute">Գործառնական նշանակությունը</dt>
-            <dd class="text-right font-medium text-charcoal">
+            <dd class="font-medium text-charcoal sm:text-right">
               {{ property.designation.functional }}
             </dd>
           </div>
-          <div class="flex justify-between gap-4 text-sm">
+          <div class="flex flex-col gap-0.5 text-sm sm:flex-row sm:justify-between sm:gap-4">
             <dt class="text-charcoal-mute">Իրավունքի տեսակը</dt>
-            <dd class="text-right font-medium text-charcoal">
+            <dd class="font-medium text-charcoal sm:text-right">
               {{ property.designation.ownership }}
             </dd>
           </div>

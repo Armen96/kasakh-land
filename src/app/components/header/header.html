@@ -12,13 +12,13 @@
   <div class="u-container flex h-16 items-center justify-between md:h-20">
     <a
       href="#hero"
-      class="font-display text-base font-semibold tracking-[0.18em] transition-colors duration-500 md:text-lg"
+      class="-my-2 py-2 font-display text-base font-semibold tracking-[0.18em] transition-colors duration-500 md:text-lg"
       [class]="brandClass()"
     >
       {{ property.name }}
     </a>
 
-    <nav class="hidden items-center gap-8 lg:flex" aria-label="Հիմնական">
+    <nav class="hidden items-center gap-7 xl:flex" aria-label="Հիմնական">
       @for (link of links; track link.fragment) {
         <a
           [href]="'#' + link.fragment"
@@ -42,7 +42,7 @@
 
     <button
       type="button"
-      class="-mr-2 flex h-10 w-10 items-center justify-center lg:hidden"
+      class="-mr-2 flex h-10 w-10 items-center justify-center xl:hidden"
       [attr.aria-expanded]="menuOpen()"
       aria-controls="mobile-menu"
       [attr.aria-label]="menuOpen() ? 'Փակել մենյուն' : 'Բացել մենյուն'"
@@ -67,7 +67,7 @@
 
   <div
     id="mobile-menu"
-    class="overflow-hidden border-t border-charcoal/10 bg-ivory transition-all duration-500 lg:hidden"
+    class="overflow-hidden border-t border-charcoal/10 bg-ivory transition-all duration-500 xl:hidden"
     [class]="menuPanelClass()"
     [attr.inert]="menuOpen() ? null : ''"
   >

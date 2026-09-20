@@ -140,6 +140,13 @@ export const PROPERTY = {
       width: 1400,
       height: 959,
     },
+    {
+      src: '/images/cadastral-plan.jpg',
+      alt: 'Հողամասի պաշտոնական կադաստրային հատակագիծը՝ 1:1000 մասշտաբով, կողմերի չափերով',
+      badge: 'Կադաստրային փաստաթուղթ',
+      width: 643,
+      height: 470,
+    },
   ] as readonly GalleryImage[],
 
   /**
