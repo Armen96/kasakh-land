@@ -77,12 +77,12 @@ export const PROPERTY = {
     short: 'Կոտայքի մարզ, Քասախ գյուղ',
     full: 'Կոտայքի մարզ, Նաիրի համայնք, գյուղ Քասախ, Մուշի 14-րդ փողոց, 15 հողամաս',
     /** Owner-supplied coordinates, resolved from a Google Maps share link. */
-    coordinates: { lat: 40.223524, lng: 44.467117 },
+    coordinates: { lat: 40.222752, lng: 44.466572 },
     mapEmbedUrl:
-      'https://www.google.com/maps?q=40.223524,44.467117&hl=hy&z=18&output=embed' as
+      'https://www.google.com/maps?q=40.222752,44.466572&hl=hy&z=18&output=embed' as
         | string
         | null,
-    mapLinkUrl: 'https://maps.app.goo.gl/Pu3W4R7Ae7a6aeL5A' as string | null,
+    mapLinkUrl: 'https://maps.app.goo.gl/8oXDkZhRSiGauHGZ6' as string | null,
   },
 
   designation: {
