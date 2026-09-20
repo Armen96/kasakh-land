@@ -1,0 +1,66 @@
+@if (concepts.length > 0) {
+  <section id="concepts" class="scroll-mt-20 bg-ivory py-20 md:py-28">
+    <div class="u-container">
+      <div class="max-w-2xl" appReveal>
+        <p class="u-eyebrow">Գաղափարներ</p>
+        <div class="u-rule mt-4"></div>
+        <h2 class="mt-6 font-display text-3xl font-medium text-charcoal md:text-4xl">
+          Կառուցապատման հնարավոր տարբերակներ
+        </h2>
+        <p class="mt-4 text-[0.95rem] leading-relaxed text-charcoal-soft">
+          Ստորև ներկայացված են հողամասի հնարավոր օգտագործման պատկերավոր
+          գաղափարներ՝ պատկերացում կազմելու համար։
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-8 md:grid-cols-3 md:gap-6">
+        @for (concept of concepts; track concept.src; let i = $index) {
+          <figure [appReveal]="i * 90">
+            <!--
+              Rendered at natural ratio: cropping would clip the "CONCEPT ONLY"
+              corner labels burned into these images.
+            -->
+            <div class="relative overflow-hidden rounded-sm bg-charcoal/5">
+              <img
+                [src]="concept.src"
+                [alt]="concept.alt"
+                [width]="concept.width"
+                [height]="concept.height"
+                loading="lazy"
+                decoding="async"
+                sizes="(min-width: 768px) 33vw, 100vw"
+                class="block h-auto w-full"
+              />
+              <span
+                class="absolute top-2.5 left-2.5 rounded-xs bg-charcoal/75 px-2.5 py-1 text-[0.6875rem] font-medium text-ivory backdrop-blur-sm"
+              >
+                {{ concept.badge }}
+              </span>
+            </div>
+            <figcaption class="mt-4">
+              <p class="font-display text-lg font-medium text-charcoal">
+                {{ concept.title }}
+              </p>
+              <p class="mt-1.5 text-[0.8125rem] leading-relaxed text-charcoal-mute">
+                {{ concept.summary }}
+              </p>
+            </figcaption>
+          </figure>
+        }
+      </div>
+
+      <!--
+        These are visualizations of what could be built, not an approved
+        project and not a claim that the plot may be divided.
+      -->
+      <p
+        class="mt-10 max-w-3xl border-l-2 border-gold-soft pl-5 text-[0.8125rem] leading-relaxed text-charcoal-mute"
+      >
+        Պատկերները ներկայացված են միայն պատկերավոր նպատակով և չեն հանդիսանում
+        կառուցապատման հաստատված նախագիծ։ Կառուցապատման ծավալները, հողամասի
+        հնարավոր բաժանումը և ցանկացած շինարարություն ենթակա են գործող
+        քաղաքաշինական նորմերի և համապատասխան թույլտվությունների ստացման։
+      </p>
+    </div>
+  </section>
+}

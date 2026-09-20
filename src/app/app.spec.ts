@@ -11,6 +11,6 @@ describe('App', () => {
     fixture.detectChanges();
 
     const heading = fixture.nativeElement.querySelector('h1') as HTMLElement;
-    expect(heading.textContent).toContain('917 քմ հողատարածք');
+    expect(heading.textContent).toContain('910 քմ հողատարածք');
   });
 });

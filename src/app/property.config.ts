@@ -22,6 +22,12 @@ export interface GalleryImage {
   readonly srcset?: string;
 }
 
+/** An illustrative development idea — never a photograph, never an approved plan. */
+export interface ConceptImage extends GalleryImage {
+  readonly title: string;
+  readonly summary: string;
+}
+
 export interface BoundaryEdge {
   readonly id: string;
   /** Armenian label, e.g. «Ճակատային մաս (ճանապարհ)». */
@@ -32,19 +38,20 @@ export interface BoundaryEdge {
 /**
  * A contact channel is rendered only when its value is non-null.
  * Leaving a value null hides the button entirely rather than emitting a
- * dead link — see CONTACT_PLACEHOLDERS below.
+ * dead link.
  */
 export interface ContactConfig {
   /** E.164, e.g. '+37477123456'. */
   readonly phone: string | null;
   /** Digits only, no '+', e.g. '37477123456'. */
   readonly whatsapp: string | null;
-  /** Username without '@'. */
+  /** Username without '@', or a phone number in '+374…' form. */
   readonly telegram: string | null;
+  readonly email: string | null;
 }
 
 export const PROPERTY = {
-  name: 'KASAKH 917',
+  name: 'KASAKH 910',
 
   price: {
     /** Displayed asking price. */
@@ -54,15 +61,12 @@ export const PROPERTY = {
   },
 
   area: {
-    /** Advertised area, in square metres. */
-    squareMetres: 917,
-    display: '917 քմ',
     /**
-     * The registration certificate records 0.091 ha at three-decimal
-     * precision. Confirm the exact registered area before publication —
-     * tracked as a GitHub issue.
+     * Registered area, confirmed by the owner against the cadastral record.
+     * The certificate records 0.091 ha, which is this figure.
      */
-    certificateHectares: 0.091,
+    squareMetres: 910,
+    display: '910 քմ',
   },
 
   location: {
@@ -72,13 +76,13 @@ export const PROPERTY = {
     street: 'Մուշի 14-րդ փողոց, 15 հողամաս',
     short: 'Կոտայքի մարզ, Քասախ գյուղ',
     full: 'Կոտայքի մարզ, Նաիրի համայնք, գյուղ Քասախ, Մուշի 14-րդ փողոց, 15 հողամաս',
-    /**
-     * Set to a verified Google Maps embed URL once exact coordinates are
-     * confirmed. While null, the section falls back to a clearly labelled
-     * address search rather than dropping a pin at a guessed location.
-     */
-    mapEmbedUrl: null as string | null,
-    mapLinkUrl: null as string | null,
+    /** Owner-supplied coordinates, resolved from a Google Maps share link. */
+    coordinates: { lat: 40.223524, lng: 44.467117 },
+    mapEmbedUrl:
+      'https://www.google.com/maps?q=40.223524,44.467117&hl=hy&z=18&output=embed' as
+        | string
+        | null,
+    mapLinkUrl: 'https://maps.app.goo.gl/Pu3W4R7Ae7a6aeL5A' as string | null,
   },
 
   designation: {
@@ -108,7 +112,7 @@ export const PROPERTY = {
   ] as readonly string[],
 
   description:
-    'Վաճառվում է 917 քմ հողատարածք՝ Կոտայքի մարզի Քասախ գյուղում։ ' +
+    'Վաճառվում է 910 քմ հողատարածք՝ Կոտայքի մարզի Քասախ գյուղում։ ' +
     'Հողամասը նախատեսված է բնակելի կառուցապատման համար և ունի 32 մետր լայն ճակատային մաս։',
 
   /**
@@ -126,20 +130,67 @@ export const PROPERTY = {
       width: 1402,
       height: 1122,
     },
+    {
+      src: '/images/land-road-view.jpg',
+      srcset:
+        '/images/land-road-view-640.jpg 640w, ' +
+        '/images/land-road-view-960.jpg 960w, ' +
+        '/images/land-road-view.jpg 1400w',
+      alt: 'Հողամասի տեսքը ճանապարհից՝ հարևան կառուցապատումը և շրջակայքը',
+      width: 1400,
+      height: 959,
+    },
   ] as readonly GalleryImage[],
 
+  /**
+   * Illustrative development ideas, shown apart from the photographs.
+   * These are visualizations, not approved projects, and the section says so.
+   */
+  concepts: [
+    {
+      src: '/images/concept-house-large.jpg',
+      alt: 'Պատկերավոր տարբերակ՝ մեկ բնակելի տուն մոտ 14 × 12 մ, լողավազան և հանգստի գոտի',
+      badge: 'Պատկերավոր վիզուալիզացիա',
+      title: 'Մեկ տուն՝ ընդարձակ',
+      summary: 'Տուն՝ մոտ 14 × 12 մ, լողավազան՝ մոտ 8 × 4 մ, ավտոկանգառ և այգի։',
+      width: 1400,
+      height: 1200,
+    },
+    {
+      src: '/images/concept-house-small.jpg',
+      alt: 'Պատկերավոր տարբերակ՝ մեկ բնակելի տուն մոտ 12 × 10 մ, լողավազան և ավելի մեծ այգի',
+      badge: 'Պատկերավոր վիզուալիզացիա',
+      title: 'Մեկ տուն՝ կոմպակտ',
+      summary: 'Տուն՝ մոտ 12 × 10 մ, լողավազան՝ մոտ 6 × 4 մ, ավելի ընդարձակ կանաչ տարածք։',
+      width: 1400,
+      height: 1199,
+    },
+    {
+      src: '/images/concept-two-houses.jpg',
+      alt: 'Պատկերավոր տարբերակ՝ երկու բնակելի տուն՝ յուրաքանչյուրը մոտ 10 × 11 մ',
+      badge: 'Պատկերավոր վիզուալիզացիա',
+      title: 'Երկու տուն',
+      summary: 'Երկու տուն՝ յուրաքանչյուրը մոտ 10 × 11 մ, առանձին մուտքերով։',
+      width: 1400,
+      height: 1200,
+    },
+  ] as readonly ConceptImage[],
+
   contact: {
-    phone: null,
-    whatsapp: null,
-    telegram: null,
+    phone: '+37498512371',
+    whatsapp: '37498512371',
+    telegram: '+37498512371',
+    email: 'barsegyan96armen@gmail.com',
   } as ContactConfig,
 
   whatsappMessage:
-    'Բարև Ձեզ, հետաքրքրված եմ Քասախում վաճառվող 917 քմ հողատարածքով։ ' +
+    'Բարև Ձեզ, հետաքրքրված եմ Քասախում վաճառվող 910 քմ հողատարածքով։ ' +
     'Կցանկանայի ստանալ լրացուցիչ տեղեկություններ։',
 
+  emailSubject: 'Հարցում՝ Քասախում վաճառվող 910 քմ հողատարածքի վերաբերյալ',
+
   /** Used for canonical + Open Graph URLs. */
-  siteUrl: 'https://kasakh917.web.app',
+  siteUrl: 'https://kasakh910.web.app',
 
   year: 2026,
 } as const;
@@ -148,4 +199,5 @@ export const PROPERTY = {
 export const HAS_CONTACT =
   PROPERTY.contact.phone !== null ||
   PROPERTY.contact.whatsapp !== null ||
-  PROPERTY.contact.telegram !== null;
+  PROPERTY.contact.telegram !== null ||
+  PROPERTY.contact.email !== null;

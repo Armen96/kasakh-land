@@ -30,6 +30,7 @@ export class Header {
     { fragment: 'about', label: 'Հողամասի մասին' },
     { fragment: 'gallery', label: 'Լուսանկարներ' },
     { fragment: 'plan', label: 'Հատակագիծ' },
+    { fragment: 'concepts', label: 'Տարբերակներ' },
     { fragment: 'location', label: 'Տեղադրություն' },
     { fragment: 'contact', label: 'Կապ' },
   ];

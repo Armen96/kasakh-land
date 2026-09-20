@@ -17,11 +17,27 @@ export class Contact {
     ? `tel:${this.contact.phone}`
     : null;
 
+  /** Shown on the button so a buyer can note the number down. */
+  protected readonly phoneDisplay = this.contact.phone
+    ? this.contact.phone.replace(/^(\+374)(\d{2})(\d{3})(\d{3})$/, '$1 $2 $3 $4')
+    : null;
+
   protected readonly whatsappHref = this.contact.whatsapp
     ? `https://wa.me/${this.contact.whatsapp}?text=${encodeURIComponent(PROPERTY.whatsappMessage)}`
     : null;
 
+  /** t.me accepts either a username or a '+'-prefixed phone number. */
   protected readonly telegramHref = this.contact.telegram
-    ? `https://t.me/${this.contact.telegram}`
+    ? `https://t.me/${this.contact.telegram.replace(/^@/, '')}`
     : null;
+
+  protected readonly emailHref = this.contact.email
+    ? `mailto:${this.contact.email}` +
+      `?subject=${encodeURIComponent(PROPERTY.emailSubject)}` +
+      `&body=${encodeURIComponent(PROPERTY.whatsappMessage)}`
+    : null;
+
+  /** Target for the single sticky mobile button — calling comes first. */
+  protected readonly primaryHref =
+    this.telHref ?? this.whatsappHref ?? this.telegramHref ?? this.emailHref;
 }

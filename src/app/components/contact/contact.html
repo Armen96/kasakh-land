@@ -38,7 +38,7 @@
                   d="M5 3h3.2l1.6 4-2 1.4a12 12 0 0 0 5.8 5.8l1.4-2 4 1.6V19a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3 5.2 2 2 0 0 1 5 3z"
                 />
               </svg>
-              Զանգահարել
+              {{ phoneDisplay ?? 'Զանգահարել' }}
             </a>
           }
           @if (whatsappHref) {
@@ -69,6 +69,27 @@
                 />
               </svg>
               Telegram
+            </a>
+          }
+          @if (emailHref) {
+            <a
+              [href]="emailHref"
+              class="inline-flex items-center justify-center gap-2.5 rounded-sm border border-ivory/35 px-7 py-4 text-[0.9375rem] font-medium text-ivory transition-colors duration-300 hover:border-ivory hover:bg-ivory/10"
+            >
+              <svg
+                class="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="m3.5 6.5 8.5 6 8.5-6" />
+              </svg>
+              Էլ. փոստ
             </a>
           }
         </div>
@@ -105,7 +126,7 @@
         </p>
       </div>
       <a
-        [href]="telHref ?? whatsappHref ?? telegramHref"
+        [href]="primaryHref"
         class="shrink-0 rounded-sm bg-forest px-6 py-3 text-[0.9375rem] font-medium text-ivory"
       >
         Կապ հաստատել

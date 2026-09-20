@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Concepts } from './components/concepts/concepts';
 import { Contact } from './components/contact/contact';
 import { Footer } from './components/footer/footer';
 import { Gallery } from './components/gallery/gallery';
@@ -12,7 +13,17 @@ import { HAS_CONTACT } from './property.config';
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  imports: [Header, Hero, Highlights, Gallery, LandPlan, Location, Contact, Footer],
+  imports: [
+    Header,
+    Hero,
+    Highlights,
+    Gallery,
+    LandPlan,
+    Concepts,
+    Location,
+    Contact,
+    Footer,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
