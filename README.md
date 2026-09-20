@@ -60,6 +60,7 @@ npm install
 npm start          # dev server at http://localhost:4200
 npm run build      # production build + prerender → dist/kasakh-land/browser
 npm test           # unit tests
+npm run deploy:dev # build, then deploy to Firebase Hosting
 ```
 
 ## Deployment — Firebase Hosting
@@ -67,25 +68,36 @@ npm test           # unit tests
 `outputMode: "static"` prerenders the page to plain HTML, so Hosting serves
 static files with no Node runtime and no SPA rewrites.
 
-The Firebase project does **not** exist yet. First time only:
+Firebase project: **`kasakh-land`**, so the site publishes to
+`https://kasakh-land.web.app`. That URL is also set as `siteUrl` in
+`property.config.ts` and as the canonical / Open Graph URL in `src/index.html`.
+
+```bash
+npm run deploy:dev     # ng build && firebase deploy --only hosting
+```
+
+First time on a given machine:
 
 ```bash
 npm i -g firebase-tools
-firebase login
-firebase projects:create kasakh910        # or create it in the Firebase console
-firebase use kasakh910
+firebase login         # must be the Google account that owns kasakh-land
 ```
 
-Then, for every release:
+If the CLI is signed in to a different account, `firebase projects:list` will
+not show `kasakh-land` and the deploy fails with a 403. Either sign in as the
+owning account, or add it alongside the current one:
+
+```bash
+firebase login:add
+firebase deploy --only hosting --account <owning-account@gmail.com>
+```
+
+To try a build on a temporary URL before touching the live site:
 
 ```bash
 npm run build
-firebase deploy --only hosting
+firebase hosting:channel:deploy preview --expires 7d
 ```
-
-The site publishes to `https://kasakh910.web.app`. If a different project id is
-used, update `.firebaserc` and the `siteUrl` in `property.config.ts`, plus the
-canonical and Open Graph URLs in `src/index.html`.
 
 ## Private documents
 
@@ -113,3 +125,22 @@ rather than forced vertical. The four lengths cannot form a trapezoid with the
 
 It is labelled as informational on the page and is not a survey-accurate
 boundary. Replace the vertices if an official cadastral plan becomes available.
+
+## Analytics
+
+The page loads `gtag.js` for the GA4 property behind the Firebase web app
+(`G-NXKGWGQJBR`), and records a `contact_click` event with the channel —
+`phone`, `whatsapp`, `telegram` or `email` — whenever a visitor reaches for
+one. On a listing page that number matters more than pageviews.
+
+The `firebase` npm package is deliberately **not** a dependency. The only value
+this site needs from the web app config is the measurement id; the rest
+(`apiKey`, `appId`, `messagingSenderId`, `storageBucket`) addresses Firebase
+SDK products — Auth, Firestore, Storage — that a static page does not use.
+Loading the tag directly reports to the same GA4 property and keeps the bundle
+roughly 40 kB smaller. A measurement id is not a credential; it appears in the
+page source of every GA4 site.
+
+The tag is skipped when `isDevMode()` is true, so local work does not reach the
+statistics. Note that GA4 sets cookies — if the listing is ever aimed at EU
+visitors, a consent notice would be needed.

@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  afterNextRender,
+  inject,
+} from '@angular/core';
 import { Concepts } from './components/concepts/concepts';
 import { Contact } from './components/contact/contact';
 import { Footer } from './components/footer/footer';
@@ -8,6 +13,7 @@ import { Hero } from './components/hero/hero';
 import { Highlights } from './components/highlights/highlights';
 import { LandPlan } from './components/land-plan/land-plan';
 import { Location } from './components/location/location';
+import { Analytics } from './shared/analytics';
 
 @Component({
   selector: 'app-root',
@@ -25,4 +31,10 @@ import { Location } from './components/location/location';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App {}
+export class App {
+  constructor() {
+    const analytics = inject(Analytics);
+    // Browser-only: the prerender pass has no document to attach the tag to.
+    afterNextRender(() => analytics.load());
+  }
+}

@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { HAS_CONTACT, PROPERTY } from '../../property.config';
+import { Analytics } from '../../shared/analytics';
 import { RevealDirective } from '../../shared/reveal.directive';
 
 @Component({
@@ -9,6 +10,8 @@ import { RevealDirective } from '../../shared/reveal.directive';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Contact {
+  private readonly analytics = inject(Analytics);
+
   protected readonly property = PROPERTY;
   protected readonly hasContact = HAS_CONTACT;
   protected readonly contact = PROPERTY.contact;
@@ -40,4 +43,8 @@ export class Contact {
   /** Target for the single sticky mobile button — calling comes first. */
   protected readonly primaryHref =
     this.telHref ?? this.whatsappHref ?? this.telegramHref ?? this.emailHref;
+
+  protected track(method: 'phone' | 'whatsapp' | 'telegram' | 'email'): void {
+    this.analytics.trackContact(method);
+  }
 }

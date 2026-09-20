@@ -190,7 +190,7 @@ export const PROPERTY = {
   emailSubject: 'Հարցում՝ Քասախում վաճառվող 910 քմ հողատարածքի վերաբերյալ',
 
   /** Used for canonical + Open Graph URLs. */
-  siteUrl: 'https://kasakh910.web.app',
+  siteUrl: 'https://kasakh-land.web.app',
 
   year: 2026,
 } as const;
