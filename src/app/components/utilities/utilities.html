@@ -1,0 +1,108 @@
+@if (utilities.length > 0) {
+  <section id="utilities" class="scroll-mt-20 bg-forest py-16 text-ivory md:py-20">
+    <div class="u-container">
+      <div class="max-w-2xl" appReveal>
+        <p class="u-eyebrow text-gold-soft">Ենթակառուցվածքներ</p>
+        <div class="u-rule mt-4 bg-gold-soft"></div>
+        <h2 class="mt-6 font-display text-2xl font-medium md:text-3xl">
+          Բոլոր կոմունիկացիաները հարևանությամբ
+        </h2>
+        <p class="mt-4 text-[0.95rem] leading-relaxed text-ivory/75">
+          Հողամասի անմիջական հարևանությամբ առկա են բոլոր հիմնական
+          ենթակառուցվածքները, ինչը զգալիորեն հեշտացնում է կառուցապատումը։
+        </p>
+      </div>
+
+      <ul
+        class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 border-t border-ivory/15 pt-10 min-[360px]:grid-cols-2 md:mt-12 md:grid-cols-4 md:gap-x-8"
+      >
+        @for (utility of utilities; track utility.id; let i = $index) {
+          <li class="flex flex-col items-start" [appReveal]="i * 80">
+            <span
+              class="flex h-11 w-11 items-center justify-center rounded-full border border-gold-soft/45 text-gold-soft"
+              aria-hidden="true"
+            >
+              @switch (utility.id) {
+                @case ('electricity') {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M13 2 5 13.5h5.5L11 22l8-11.5h-5.5L13 2Z" />
+                  </svg>
+                }
+                @case ('water') {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 3c3.6 4.6 6 7.6 6 10.6a6 6 0 0 1-12 0C6 10.6 8.4 7.6 12 3Z" />
+                  </svg>
+                }
+                @case ('gas') {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M12 2.5s5 4.4 5 8.8a5 5 0 0 1-10 0c0-1.9 1-3.4 1.8-4.3.3 1.2 1 2 1.9 2 1.3 0 1.8-1.6 1.3-6.5Z" />
+                  </svg>
+                }
+                @case ('sewerage') {
+                  <svg
+                    class="h-5 w-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M4 8.5h9a4 4 0 0 1 4 4v7" />
+                    <path d="M2.5 6.5v4M15 19.5h4.5" />
+                  </svg>
+                }
+              }
+            </span>
+
+            <p class="mt-4 text-[0.95rem] leading-snug font-medium">
+              {{ utility.label }}
+            </p>
+            <p class="mt-1.5 flex items-center gap-1.5 text-[0.8125rem] text-ivory/65">
+              <svg
+                class="h-3.5 w-3.5 shrink-0 text-gold-soft"
+                viewBox="0 0 20 20"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m4 10.5 4 4 8-9" />
+              </svg>
+              {{ utility.status }}
+            </p>
+          </li>
+        }
+      </ul>
+
+      <p class="mt-8 max-w-3xl text-[0.8125rem] leading-relaxed text-ivory/55">
+        Կոմունիկացիաներն անցնում են հողամասի հարևանությամբ։ Միացման պայմանները
+        և արժեքը ճշտվում են համապատասխան ծառայություններ մատուցող
+        կազմակերպությունների հետ։
+      </p>
+    </div>
+  </section>
+}

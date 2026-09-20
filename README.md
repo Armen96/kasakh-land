@@ -161,3 +161,21 @@ the shape still reads at 16px.
 `icon-512.png` and `site.webmanifest` are generated from it. To regenerate
 after editing the SVG, render it at each size and repack the .ico — there is no
 build step wired up for this, since it changes about as often as the brand.
+
+## Utilities wording
+
+`utilities` in `property.config.ts` lists electricity, water, gas and sewerage
+with a per-item `status`, currently **«Հարևանությամբ»** — present in the street
+beside the plot, *not* connected to it.
+
+That distinction is commercially and legally material: "connected" tells a
+buyer there are live supply points on the land, while "nearby" leaves the
+hook-up as their cost to arrange. The owner confirmed nearby, so the section
+says nearby, and it carries a note that connection terms and costs are settled
+with the utility providers.
+
+Do not upgrade any of this to «միացված է» without the owner confirming live
+connections on the land itself. If that changes for one utility but not
+others, set its own `status` — the section renders each independently, and no
+template edit is needed. The page description and the advantages list in the
+same file carry the matching wording and would need updating together.

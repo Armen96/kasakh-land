@@ -28,6 +28,17 @@ export interface ConceptImage extends GalleryImage {
   readonly summary: string;
 }
 
+/**
+ * A utility supply available near the plot. `status` is per-item so a future
+ * change (one utility actually connected) needs no template edit.
+ */
+export interface Utility {
+  /** Selects the icon drawn for this row. */
+  readonly id: 'electricity' | 'water' | 'gas' | 'sewerage';
+  readonly label: string;
+  readonly status: string;
+}
+
 export interface BoundaryEdge {
   readonly id: string;
   /** Armenian label, e.g. «Ճակատային մաս (ճանապարհ)». */
@@ -104,16 +115,30 @@ export const PROPERTY = {
     { id: 'right', label: 'Աջ կողմ', metres: 44.6 },
   ] as readonly BoundaryEdge[],
 
+  /**
+   * Present in the street beside the plot — NOT connected to it. The owner
+   * confirmed the distinction, and it matters to a buyer: the hook-up is
+   * still theirs to arrange. Do not upgrade this wording to «միացված է»
+   * without the owner confirming live connections on the land itself.
+   */
+  utilities: [
+    { id: 'electricity', label: 'Էլեկտրաէներգիա', status: 'Հարևանությամբ' },
+    { id: 'water', label: 'Ջրամատակարարում', status: 'Հարևանությամբ' },
+    { id: 'gas', label: 'Գազ', status: 'Հարևանությամբ' },
+    { id: 'sewerage', label: 'Կոյուղի', status: 'Հարևանությամբ' },
+  ] as readonly Utility[],
+
   advantages: [
     '32 մետր լայն ճակատային մաս',
     'Բնակելի կառուցապատման նշանակություն',
     'Ասֆալտապատ ճանապարհ',
-    'Բոլոր անհրաժեշտ կոմունիկացիաները հարևանությամբ',
+    'Բոլոր կոմունիկացիաները հարևանությամբ՝ հոսանք, ջուր, գազ, կոյուղի',
   ] as readonly string[],
 
   description:
     'Վաճառվում է 910 քմ հողատարածք՝ Կոտայքի մարզի Քասախ գյուղում։ ' +
-    'Հողամասը նախատեսված է բնակելի կառուցապատման համար և ունի 32 մետր լայն ճակատային մաս։',
+    'Հողամասը նախատեսված է բնակելի կառուցապատման համար, ունի 32 մետր լայն ' +
+    'ճակատային մաս, իսկ բոլոր կոմունիկացիաները՝ հարևանությամբ։',
 
   /**
    * Only real photographs of the property belong here. Anything that is not

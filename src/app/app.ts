@@ -13,6 +13,7 @@ import { Hero } from './components/hero/hero';
 import { Highlights } from './components/highlights/highlights';
 import { LandPlan } from './components/land-plan/land-plan';
 import { Location } from './components/location/location';
+import { Utilities } from './components/utilities/utilities';
 import { Analytics } from './shared/analytics';
 
 @Component({
@@ -22,6 +23,7 @@ import { Analytics } from './shared/analytics';
     Header,
     Hero,
     Highlights,
+    Utilities,
     Gallery,
     LandPlan,
     Concepts,
